@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm'
+import { Order } from './Order'
 
 @Entity()
 export class Customer {
@@ -24,4 +31,7 @@ export class Customer {
   Telephone: string
   @Column()
   Remark: string
+
+  @OneToMany(() => Order, order => order.customer)
+  orders: Order[]
 }
