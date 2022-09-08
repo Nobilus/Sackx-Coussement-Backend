@@ -6,9 +6,13 @@ export class ProductController {
   private productRepository = AppDataSource.getRepository(Product)
 
   async all(request: Request, response: Response, next: NextFunction) {
-    return (await this.productRepository.find()).sort((a, b) =>
-      a.name.localeCompare(b.name),
-    )
+    return (
+      await this.productRepository.find({
+        relations: {
+          unit: true,
+        },
+      })
+    ).sort((a, b) => a.name.localeCompare(b.name))
   }
 
   async one(request: Request, response: Response, next: NextFunction) {

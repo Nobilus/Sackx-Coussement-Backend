@@ -27,8 +27,6 @@ export class Product {
   @Column('double', { default: 0 })
   purchasePrice: number
 
-  @ManyToOne(() => Unit, unit => unit.products, {
-    cascade: ['insert', 'update'],
-  })
+  @ManyToOne(() => Unit, unit => unit.products)
   unit: Unit
 }

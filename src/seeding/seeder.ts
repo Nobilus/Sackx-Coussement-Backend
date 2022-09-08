@@ -24,12 +24,13 @@ const seedDb = async () => {
     const units = require('./data/units.json')
 
     const customerORM = plainToInstance(Customer, customers)
-    const productORM = plainToInstance(Product, products)
-    const unitORM = plainToInstance(Unit, units)
-
     await AppDataSource.manager.save(customerORM)
-    await AppDataSource.manager.save(productORM)
+
+    const unitORM = plainToInstance(Unit, units)
     await AppDataSource.manager.save(unitORM)
+
+    const productORM = plainToInstance(Product, products)
+    await AppDataSource.manager.save(productORM)
 
     await AppDataSource.manager.save(seeded)
 
