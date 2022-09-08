@@ -4,6 +4,8 @@ import { Request, Response } from 'express'
 import { AppDataSource } from './data-source'
 import { Routes } from './routes'
 
+const PORT = process.env.PORT || 5000
+
 AppDataSource.initialize()
   .then(async () => {
     // create express app
@@ -37,10 +39,10 @@ AppDataSource.initialize()
     // ...
 
     // start express server
-    app.listen(3000)
+    app.listen(PORT)
 
     console.log(
-      'Express server has started on port 3000. Open http://localhost:3000/users to see results',
+      `Express server has started on port ${PORT}. Open http://localhost:${PORT}/customers to see results`,
     )
   })
   .catch(error => console.log(error))
