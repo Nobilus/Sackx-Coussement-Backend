@@ -3,6 +3,7 @@ import { Customer } from '../entity/Customer'
 import { AppDataSource } from '../data-source'
 import got from 'got'
 import { pipeline } from 'stream'
+import { Like } from 'typeorm'
 
 export class CustomerController {
   private customerRepository = AppDataSource.getRepository(Customer)
@@ -21,6 +22,13 @@ export class CustomerController {
   }
 
   async all(request: Request, response: Response, next: NextFunction) {
+    const query = request.query.q
+
+    if (query) {
+      return this.customerRepository.find({
+        where: { Name: Like(`%${query}%`) },
+      })
+    }
     return this.customerRepository.find()
   }
 

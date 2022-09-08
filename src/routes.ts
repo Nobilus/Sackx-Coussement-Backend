@@ -3,7 +3,7 @@ import { CustomerController } from './controller/CustomerController'
 const customerRoutes = [
   {
     method: 'get',
-    route: '/customer',
+    route: '/customers',
     controller: CustomerController,
     action: 'all',
   },

@@ -12,7 +12,7 @@ export class Customer {
   @PrimaryGeneratedColumn()
   id: number
   @Column({ default: null })
-  name: string
+  Name: string
   @Column()
   Street: string
   @Column()
