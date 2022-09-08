@@ -6,6 +6,18 @@ export class OrderController {
   private orderRepository = AppDataSource.getRepository(Order)
 
   async all(request: Request, response: Response, next: NextFunction) {
+    const query = request.query.type
+
+    if (query && query === 'bestelbon') {
+      return this.orderRepository.find({
+        where: { orderType: 'bestelbon' },
+      })
+    } else if (query && query === 'offerte') {
+      return this.orderRepository.find({
+        where: { orderType: 'offerte' },
+      })
+    }
+
     return this.orderRepository.find()
   }
 
