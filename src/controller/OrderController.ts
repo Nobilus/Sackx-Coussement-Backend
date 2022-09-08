@@ -40,7 +40,7 @@ export class OrderController {
     const newOrder = new Order()
 
     newOrder.customer = request.body.customerId
-    newOrder.orderType = 'bestelbon'
+    newOrder.orderType = request.body.bestelbon
     newOrder.productOrders = []
 
     const savedOrder = await this.orderRepository.save(newOrder)
