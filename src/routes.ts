@@ -45,13 +45,13 @@ const productRoutes = [
   },
   {
     method: 'get',
-    route: '/api/product',
+    route: '/api/product/:id',
     controller: ProductController,
     action: 'one',
   },
   {
     method: 'post',
-    route: '/api/product/:id',
+    route: '/api/product',
     controller: ProductController,
     action: 'save',
   },

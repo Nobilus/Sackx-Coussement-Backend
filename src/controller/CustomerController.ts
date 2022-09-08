@@ -26,7 +26,7 @@ export class CustomerController {
 
     if (query) {
       return this.customerRepository.find({
-        where: { Name: Like(`%${query}%`) },
+        where: { name: Like(`%${query}%`) },
       })
     }
     return this.customerRepository.find()
