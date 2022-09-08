@@ -6,31 +6,31 @@ import { UnitController } from './controller/UnitController'
 const customerRoutes = [
   {
     method: 'get',
-    route: '/customers',
+    route: '/api/customers',
     controller: CustomerController,
     action: 'all',
   },
   {
     method: 'get',
-    route: '/customer/:id',
+    route: '/api/customer/:id',
     controller: CustomerController,
     action: 'one',
   },
   {
     method: 'post',
-    route: '/customer',
+    route: '/api/customer',
     controller: CustomerController,
     action: 'save',
   },
   {
     method: 'delete',
-    route: '/customers/:id',
+    route: '/api/customers/:id',
     controller: CustomerController,
     action: 'remove',
   },
   {
     method: 'get',
-    route: '/validate/:vatnumber',
+    route: '/api/validate/:vatnumber',
     controller: CustomerController,
     action: 'lookup',
   },
@@ -45,19 +45,19 @@ const productRoutes = [
   },
   {
     method: 'get',
-    route: '/product',
+    route: '/api/product',
     controller: ProductController,
     action: 'one',
   },
   {
     method: 'post',
-    route: '/product/:id',
+    route: '/api/product/:id',
     controller: ProductController,
     action: 'save',
   },
   {
     method: 'delete',
-    route: '/product/:id',
+    route: '/api/product/:id',
     controller: ProductController,
     action: 'remove',
   },
@@ -66,25 +66,25 @@ const productRoutes = [
 const orderRoutes = [
   {
     method: 'get',
-    route: '/orders',
+    route: '/api/orders',
     controller: OrderController,
     action: 'all',
   },
   {
     method: 'get',
-    route: '/order/:id',
+    route: '/api/order/:id',
     controller: OrderController,
     action: 'one',
   },
   {
     method: 'post',
-    route: '/order',
+    route: '/api/order',
     controller: OrderController,
     action: 'save',
   },
   {
-    method: 'remove',
-    route: '/order:id',
+    method: 'delete',
+    route: '/api/order/:id',
     controller: OrderController,
     action: 'remove',
   },
@@ -93,19 +93,19 @@ const orderRoutes = [
 const unitRoutes = [
   {
     method: 'get',
-    route: '/units',
+    route: '/api/units',
     controller: UnitController,
     action: 'all',
   },
   {
     method: 'get',
-    route: '/unit/:id',
+    route: '/api/unit/:id',
     controller: UnitController,
     action: 'one',
   },
   {
     method: 'post',
-    route: '/unit',
+    route: '/api/unit',
     controller: UnitController,
     action: 'save',
   },
