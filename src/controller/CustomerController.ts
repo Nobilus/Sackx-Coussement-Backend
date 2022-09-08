@@ -25,11 +25,15 @@ export class CustomerController {
     const query = request.query.q
 
     if (query) {
-      return this.customerRepository.find({
-        where: { name: Like(`%${query}%`) },
-      })
+      return (
+        await this.customerRepository.find({
+          where: { name: Like(`%${query}%`) },
+        })
+      ).sort((a, b) => a.name.localeCompare(b.name))
     }
-    return this.customerRepository.find()
+    return (await this.customerRepository.find()).sort((a, b) =>
+      a.name.localeCompare(b.name),
+    )
   }
 
   async one(request: Request, response: Response, next: NextFunction) {
