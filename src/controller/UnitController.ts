@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import { AppDataSource } from '../data-source'
-import { Product } from '../entity/Product'
+import { Unit } from '../entity/Unit'
 
 export class UnitController {
-  private unitRepository = AppDataSource.getRepository(Product)
+  private unitRepository = AppDataSource.getRepository(Unit)
 
   async all(request: Request, response: Response, next: NextFunction) {
     return this.unitRepository.find()
