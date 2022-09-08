@@ -1,11 +1,9 @@
 import {
   Column,
   Entity,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
-  OneToMany,
   ManyToOne,
 } from 'typeorm'
 import { Customer } from './Customer'

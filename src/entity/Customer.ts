@@ -12,25 +12,25 @@ export class Customer {
   @PrimaryGeneratedColumn()
   id: number
   @Column({ default: null })
-  Name: string
+  name: string
   @Column()
-  Street: string
+  street: string
   @Column()
-  Postal: string
+  postal: string
   @Column()
-  City: string
+  city: string
   @Column({ default: null })
-  VatNumber: string
+  vatNumber: string
   @Column({ default: null })
-  Contact1: string
+  contact1: string
   @Column({ default: null })
-  Contact2: string
+  contact2: string
   @Column({ default: null })
-  Contact3: string
+  contact3: string
   @Column({ default: null })
-  Telephone: string
+  telephone: string
   @Column({ default: null })
-  Remark: string
+  remark: string
 
   @OneToMany(() => Order, order => order.customer)
   orders: Order[]

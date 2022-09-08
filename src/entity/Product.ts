@@ -13,19 +13,19 @@ export class Product {
   id: number
 
   @Column()
-  Name: string
+  name: string
 
   @Column('double', { default: 0 })
-  Thickness: number
+  thickness: number
 
   @Column('double', { default: 0 })
-  Width: number
+  width: number
 
   @Column('double', { default: 0 })
-  Price: number
+  price: number
 
   @Column('double', { default: 0 })
-  PurchasePrice: number
+  purchasePrice: number
 
   @ManyToOne(() => Unit, unit => unit.products, {
     cascade: ['insert', 'update'],
