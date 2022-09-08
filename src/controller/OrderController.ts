@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import { AppDataSource } from '../data-source'
 import { Order } from '../entity/Order'
+import { Product } from '../entity/Product'
+import { OrderProduct } from '../entity/OrderProduct'
 
 export class OrderController {
   private orderRepository = AppDataSource.getRepository(Order)
@@ -35,15 +37,23 @@ export class OrderController {
   }
 
   async save(request: Request, response: Response, next: NextFunction) {
-    // const newOrder = new Order()
+    const newOrder = new Order()
 
-    // newOrder.createdAt = new Date()
-    // newOrder.orderType = request.body.orderType
-    // newOrder.customer = request.body.customer
+    newOrder.customer = request.body.customerId
+    newOrder.orderType = 'bestelbon'
+    newOrder.productOrders = []
 
-    // newOrder.products = request.body.products
+    const savedOrder = await this.orderRepository.save(newOrder)
 
-    return this.orderRepository.save(request.body)
+    request.body.products.forEach(item => {
+      savedOrder.productOrders.push({
+        ...item,
+        orderId: savedOrder.id,
+        customerId: request.body.customerId,
+      })
+    })
+
+    return this.orderRepository.save(savedOrder)
   }
 
   async remove(
