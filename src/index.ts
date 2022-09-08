@@ -4,13 +4,16 @@ import { Request, Response } from 'express'
 import { AppDataSource } from './data-source'
 import { Routes } from './routes'
 import seedDb from './seeding/seeder'
+import * as cors from 'cors'
 
 const PORT = process.env.PORT || 5000
 
 AppDataSource.initialize()
   .then(async () => {
     // create express app
+
     const app = express()
+    app.use(cors())
     app.use(bodyParser.json())
 
     // register express routes from defined application routes

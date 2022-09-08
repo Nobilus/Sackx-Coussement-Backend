@@ -39,7 +39,7 @@ const customerRoutes = [
 const productRoutes = [
   {
     method: 'get',
-    route: '/products',
+    route: '/api/products',
     controller: ProductController,
     action: 'all',
   },
