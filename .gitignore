@@ -6,3 +6,4 @@ tmp/
 temp/
 *.log
 .env
+src/seeding/data/*

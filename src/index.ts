@@ -3,6 +3,7 @@ import * as bodyParser from 'body-parser'
 import { Request, Response } from 'express'
 import { AppDataSource } from './data-source'
 import { Routes } from './routes'
+import seedDb from './seeding/seeder'
 
 const PORT = process.env.PORT || 5000
 
@@ -37,6 +38,8 @@ AppDataSource.initialize()
 
     // setup express app here
     // ...
+
+    seedDb()
 
     // start express server
     app.listen(PORT)

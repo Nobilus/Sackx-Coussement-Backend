@@ -13,13 +13,13 @@ export class Product {
   id: number
   @Column()
   Name: string
-  @Column()
+  @Column('double', { default: 0 })
   Thickness: number
-  @Column()
+  @Column('double', { default: 0 })
   Width: number
-  @Column()
+  @Column('double', { default: 0 })
   Price: number
-  @Column()
+  @Column('double', { default: 0 })
   PurchasePrice: number
   @ManyToOne(() => Unit, unit => unit.products)
   unit: Unit
