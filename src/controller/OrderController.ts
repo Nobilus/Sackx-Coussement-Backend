@@ -18,7 +18,14 @@ export class OrderController {
       })
     }
 
-    return this.orderRepository.find()
+    return this.orderRepository.find({
+      relations: {
+        customer: true,
+        productOrders: {
+          product: true,
+        },
+      },
+    })
   }
 
   async one(request: Request, response: Response, next: NextFunction) {
