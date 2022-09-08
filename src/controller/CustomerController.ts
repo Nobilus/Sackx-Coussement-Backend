@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { Customer } from '../entity/Customer'
 import { AppDataSource } from '../data-source'
-import got from 'got'
+
 import { pipeline } from 'stream'
 import { Like } from 'typeorm'
 
