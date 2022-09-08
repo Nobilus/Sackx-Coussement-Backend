@@ -28,6 +28,14 @@ export class OrderController {
   }
 
   async save(request: Request, response: Response, next: NextFunction) {
+    // const newOrder = new Order()
+
+    // newOrder.createdAt = new Date()
+    // newOrder.orderType = request.body.orderType
+    // newOrder.customer = request.body.customer
+
+    // newOrder.products = request.body.products
+
     return this.orderRepository.save(request.body)
   }
 

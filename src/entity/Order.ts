@@ -5,23 +5,29 @@ import {
   ManyToMany,
   JoinTable,
   ManyToOne,
+  CreateDateColumn,
+  OneToMany,
 } from 'typeorm'
 import { Customer } from './Customer'
+import { OrderProduct } from './OrderProduct'
 import { Product } from './Product'
 
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn()
   id: number
-  @Column()
-  date: Date
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date
+
   @Column()
   orderType: string
 
-  @ManyToMany(() => Product)
-  @JoinTable()
-  products: Product[]
-
   @ManyToOne(() => Customer, customer => customer.orders)
   customer: Customer
+
+  @OneToMany(() => OrderProduct, orderProduct => orderProduct.product, {
+    cascade: true,
+  })
+  productOrders: OrderProduct[]
 }

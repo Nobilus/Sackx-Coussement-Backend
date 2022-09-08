@@ -2,9 +2,11 @@ import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm'
+import { OrderProduct } from './OrderProduct'
 import { Unit } from './Unit'
 
 @Entity()
@@ -29,4 +31,9 @@ export class Product {
 
   @ManyToOne(() => Unit, unit => unit.products)
   unit: Unit
+
+  @OneToMany(() => OrderProduct, orderProduct => orderProduct.product, {
+    cascade: true,
+  })
+  productOrders: OrderProduct[]
 }

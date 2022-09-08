@@ -6,6 +6,7 @@ import { Customer } from './entity/Customer'
 import { Product } from './entity/Product'
 import { Unit } from './entity/Unit'
 import { Config } from './entity/Config'
+import { OrderProduct } from './entity/OrderProduct'
 
 dotenv.config()
 
@@ -19,7 +20,7 @@ export const AppDataSource = new DataSource({
   charset: 'utf8',
   synchronize: true,
   logging: false,
-  entities: [Customer, Order, Product, Unit, Config],
+  entities: [Customer, Order, Product, Unit, Config, OrderProduct],
   migrations: [],
   subscribers: [],
 })
