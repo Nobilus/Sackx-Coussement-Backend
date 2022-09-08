@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
 import { Customer } from '../entity/Customer'
 import { AppDataSource } from '../data-source'
-
+import axios from 'axios'
 import { pipeline } from 'stream'
 import { Like } from 'typeorm'
+import { IVatvalidatorResponse } from '../types'
 
 export class CustomerController {
   private customerRepository = AppDataSource.getRepository(Customer)
@@ -11,14 +12,26 @@ export class CustomerController {
   async lookup(req: Request, res: Response, next: NextFunction) {
     const vatNumber = req.params.vatnumber
     const url = `https://controleerbtwnummer.eu/api/validate/${vatNumber}.json`
-    const datastream = got.stream(url)
 
-    pipeline(datastream, res, err => {
-      if (err) {
-        console.log(err)
-        res.sendStatus(500)
-      }
+    const response = await axios.get<IVatvalidatorResponse>(url)
+    const data = response.data
+
+    const newCustomer = new Customer()
+    newCustomer.name = data.name
+    newCustomer.city = data.address.city
+    newCustomer.postal = data.address.zip_code
+    newCustomer.street = `${data.address.street} ${data.address.number}`
+    newCustomer.vatNumber = data.vatNumber
+
+    const checkIfCustomerExists = await this.customerRepository.findOneBy({
+      vatNumber: data.vatNumber,
     })
+
+    if (checkIfCustomerExists) {
+      return checkIfCustomerExists
+    }
+
+    return this.customerRepository.save(newCustomer)
   }
 
   async all(request: Request, response: Response, next: NextFunction) {
