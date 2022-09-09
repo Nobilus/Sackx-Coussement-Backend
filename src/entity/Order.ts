@@ -28,6 +28,8 @@ export class Order {
   })
   customer: Customer
 
-  @OneToMany(() => OrderProduct, orderProduct => orderProduct.product)
+  @OneToMany(() => OrderProduct, orderProduct => orderProduct.product, {
+    cascade: true,
+  })
   productOrders: OrderProduct[]
 }
