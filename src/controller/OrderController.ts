@@ -37,10 +37,12 @@ export class OrderController {
   }
 
   async save(request: Request, response: Response, next: NextFunction) {
+    console.log(request.body)
+
     const newOrder = new Order()
 
     newOrder.customer = request.body.customerId
-    newOrder.orderType = request.body.bestelbon
+    newOrder.orderType = request.body.orderType
     newOrder.productOrders = []
 
     const savedOrder = await this.orderRepository.save(newOrder)
