@@ -12,25 +12,21 @@ export class CustomerController {
     const vatNumber = req.params.vatnumber
     const url = `https://controleerbtwnummer.eu/api/validate/${vatNumber}.json`
 
-    const response = await axios.get<IVatvalidatorResponse>(url)
-    const data = response.data
-
-    const newCustomer = new Customer()
-    newCustomer.name = data.name
-    newCustomer.city = data.address.city
-    newCustomer.postal = data.address.zip_code
-    newCustomer.street = `${data.address.street} ${data.address.number}`
-    newCustomer.vatNumber = data.vatNumber
-
-    const checkIfCustomerExists = await this.customerRepository.findOneBy({
-      vatNumber: data.vatNumber,
-    })
-
-    if (checkIfCustomerExists) {
-      return checkIfCustomerExists
-    }
-
-    return this.customerRepository.save(newCustomer)
+    const customer = await axios
+      .get<IVatvalidatorResponse>(url)
+      .then(async ({ data }) => {
+        const newCustomer = new Customer()
+        newCustomer.name = data.name
+        newCustomer.city = data.address.city
+        newCustomer.postal = data.address.zip_code
+        newCustomer.street = `${data.address.street} ${data.address.number}`
+        newCustomer.vatNumber = data.vatNumber
+        return newCustomer
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    return customer
   }
 
   async all(request: Request, response: Response, next: NextFunction) {
@@ -55,6 +51,14 @@ export class CustomerController {
   }
 
   async save(request: Request, response: Response, next: NextFunction) {
+    const customerExists = await this.customerRepository.findOneBy({
+      name: request.body.name,
+    })
+
+    if (customerExists) {
+      console.log(customerExists)
+      return customerExists
+    }
     return this.customerRepository.save(request.body)
   }
 

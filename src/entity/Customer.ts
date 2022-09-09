@@ -11,13 +11,13 @@ import { Order } from './Order'
 export class Customer {
   @PrimaryGeneratedColumn()
   id: number
-  @Column({ default: null })
+  @Column()
   name: string
-  @Column()
+  @Column({ default: null })
   street: string
-  @Column()
+  @Column({ default: null })
   postal: string
-  @Column()
+  @Column({ default: null })
   city: string
   @Column({ default: null })
   vatNumber: string
