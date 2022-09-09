@@ -78,10 +78,10 @@ export class OrderController {
     request: Request,
     response: Response,
     next: NextFunction,
-  ): Promise<void> {
-    let userToRemove = await this.orderRepository.findOneBy({
+  ): Promise<Order> {
+    let orderToRemove = await this.orderRepository.findOneBy({
       id: parseInt(request.params.id, 10),
     })
-    await this.orderRepository.remove(userToRemove)
+    return await this.orderRepository.remove(orderToRemove)
   }
 }

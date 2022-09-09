@@ -32,8 +32,6 @@ export class Product {
   @ManyToOne(() => Unit, unit => unit.products)
   unit: Unit
 
-  @OneToMany(() => OrderProduct, orderProduct => orderProduct.product, {
-    cascade: true,
-  })
+  @OneToMany(() => OrderProduct, orderProduct => orderProduct.product)
   productOrders: OrderProduct[]
 }

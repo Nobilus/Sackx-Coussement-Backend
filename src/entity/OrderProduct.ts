@@ -19,9 +19,15 @@ export class OrderProduct {
   @Column('double', { default: 0 })
   price: number
 
-  @ManyToOne(() => Product, product => product.productOrders)
+  @ManyToOne(() => Product, product => product.productOrders, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   product: Product
 
-  @ManyToOne(() => Order, order => order.productOrders)
+  @ManyToOne(() => Order, order => order.productOrders, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   Order: Order
 }

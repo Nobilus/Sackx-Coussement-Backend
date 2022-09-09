@@ -23,11 +23,11 @@ export class Order {
   @Column()
   orderType: string
 
-  @ManyToOne(() => Customer, customer => customer.orders)
-  customer: Customer
-
-  @OneToMany(() => OrderProduct, orderProduct => orderProduct.product, {
+  @ManyToOne(() => Customer, customer => customer.orders, {
     cascade: true,
   })
+  customer: Customer
+
+  @OneToMany(() => OrderProduct, orderProduct => orderProduct.product)
   productOrders: OrderProduct[]
 }
