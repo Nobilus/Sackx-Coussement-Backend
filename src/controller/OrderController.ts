@@ -43,6 +43,12 @@ export class OrderController {
   async one(request: Request, response: Response, next: NextFunction) {
     return this.orderRepository.findOne({
       where: { id: parseInt(request.params.id, 10) },
+      relations: {
+        customer: true,
+        productOrders: {
+          product: true,
+        },
+      },
     })
   }
 
