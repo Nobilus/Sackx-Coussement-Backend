@@ -11,10 +11,22 @@ export class OrderController {
     if (query && query === 'bestelbon') {
       return this.orderRepository.find({
         where: { orderType: 'bestelbon' },
+        relations: {
+          customer: true,
+          productOrders: {
+            product: true,
+          },
+        },
       })
     } else if (query && query === 'offerte') {
       return this.orderRepository.find({
         where: { orderType: 'offerte' },
+        relations: {
+          customer: true,
+          productOrders: {
+            product: true,
+          },
+        },
       })
     }
 
