@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { AppDataSource } from '../data-source'
 import { Order } from '../entity/Order'
-import { Product } from '../entity/Product'
-import { OrderProduct } from '../entity/OrderProduct'
 
 export class OrderController {
   private orderRepository = AppDataSource.getRepository(Order)
