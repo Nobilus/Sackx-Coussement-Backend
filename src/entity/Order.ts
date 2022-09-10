@@ -2,15 +2,12 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
-  ManyToMany,
-  JoinTable,
   ManyToOne,
   CreateDateColumn,
   OneToMany,
 } from 'typeorm'
 import { Customer } from './Customer'
 import { OrderProduct } from './OrderProduct'
-import { Product } from './Product'
 
 @Entity()
 export class Order {
@@ -22,6 +19,9 @@ export class Order {
 
   @Column()
   orderType: string
+
+  @Column({ default: null })
+  remark: string
 
   @ManyToOne(() => Customer, customer => customer.orders, {
     cascade: true,
