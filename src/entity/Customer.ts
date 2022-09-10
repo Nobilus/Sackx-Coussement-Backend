@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm'
+import { Contactperson } from './Contactperson'
 import { Order } from './Order'
 
 @Entity()
@@ -22,16 +23,13 @@ export class Customer {
   @Column({ default: null })
   vatNumber: string
   @Column({ default: null })
-  contact1: string
-  @Column({ default: null })
-  contact2: string
-  @Column({ default: null })
-  contact3: string
-  @Column({ default: null })
   telephone: string
   @Column({ default: null })
   remark: string
 
   @OneToMany(() => Order, order => order.customer)
   orders: Order[]
+
+  @OneToMany(() => Contactperson, cp => cp.customer)
+  contactpersons: Contactperson[]
 }
