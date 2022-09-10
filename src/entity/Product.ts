@@ -18,12 +18,6 @@ export class Product {
   name: string
 
   @Column('double', { default: 0 })
-  thickness: number
-
-  @Column('double', { default: 0 })
-  width: number
-
-  @Column('double', { default: 0 })
   price: number
 
   @Column('double', { default: 0 })

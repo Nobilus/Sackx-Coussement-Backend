@@ -17,6 +17,15 @@ export class OrderProduct {
   amount: number
 
   @Column('double', { default: 0 })
+  length: number
+
+  @Column('double', { default: 0 })
+  thickness: number
+
+  @Column('double', { default: 0 })
+  width: number
+
+  @Column('double', { default: 0 })
   price: number
 
   @ManyToOne(() => Product, product => product.productOrders, {
