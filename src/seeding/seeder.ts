@@ -19,8 +19,8 @@ const seedDb = async () => {
 
     console.log('Seeding...')
 
-    const customers = csvToJson('src/seeding/data/klanten.csv')
-    const products = csvToJson('src/seeding/data/producten.csv')
+    const customers = csvToJson('src/seeding/data/klanten2.csv')
+    const products = csvToJson('src/seeding/data/produts.csv')
     const units = require('./data/units.json')
 
     const customerORM = plainToInstance(Customer, customers)
