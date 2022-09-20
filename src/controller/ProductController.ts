@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import { Like } from 'typeorm'
 import { AppDataSource } from '../data-source'
 import { Product } from '../entity/Product'
 
@@ -6,6 +7,14 @@ export class ProductController {
   private productRepository = AppDataSource.getRepository(Product)
 
   async all(request: Request, response: Response, next: NextFunction) {
+    const query = request.query.q
+
+    if (query) {
+      return await this.productRepository.find({
+        where: { name: Like(`%${query}%`) },
+      })
+    }
+
     return (
       await this.productRepository.find({
         relations: {
