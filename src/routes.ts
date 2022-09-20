@@ -34,6 +34,12 @@ const customerRoutes = [
     controller: CustomerController,
     action: 'lookup',
   },
+  {
+    method: 'patch',
+    route: '/api/customer',
+    controller: CustomerController,
+    action: 'update',
+  },
 ]
 
 const productRoutes = [

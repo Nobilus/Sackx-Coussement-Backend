@@ -62,6 +62,11 @@ export class CustomerController {
     return this.customerRepository.save(request.body)
   }
 
+  async update(req: Request, res: Response, next: NextFunction) {
+    await this.customerRepository.update(req.body.id, req.body)
+    return this.customerRepository.findOneBy({ id: req.body.id })
+  }
+
   async remove(
     request: Request,
     response: Response,
