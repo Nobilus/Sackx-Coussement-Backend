@@ -59,6 +59,7 @@ export class OrderController {
 
     newOrder.customer = request.body.customerId
     newOrder.orderType = request.body.orderType
+    newOrder.remark = request.body.remark
     newOrder.productOrders = []
 
     const savedOrder = await this.orderRepository.save(newOrder)
