@@ -23,7 +23,16 @@ export class Product {
   @Column('double', { default: 0 })
   purchasePrice: number
 
-  @ManyToOne(() => Unit, unit => unit.products)
+  @Column('double', { default: 1 })
+  length: number
+
+  @Column('double', { default: 1 })
+  thickness: number
+
+  @Column('double', { default: 1 })
+  width: number
+
+  @ManyToOne(() => Unit, unit => unit.products, {eager:true})
   unit: Unit
 
   @OneToMany(() => OrderProduct, orderProduct => orderProduct.product)
