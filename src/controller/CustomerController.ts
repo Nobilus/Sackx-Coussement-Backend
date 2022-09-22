@@ -7,6 +7,7 @@ import { IVatvalidatorResponse } from '../types'
 
 export class CustomerController {
   private customerRepository = AppDataSource.getRepository(Customer)
+  private manager = AppDataSource.manager
 
   async lookup(req: Request, res: Response, next: NextFunction) {
     const vatNumber = req.params.vatnumber
@@ -56,10 +57,13 @@ export class CustomerController {
     })
 
     if (customerExists) {
-      console.log(customerExists)
+      console.log('the customer exists: ', customerExists)
       return customerExists
     }
-    return this.customerRepository.save(request.body)
+
+    const newCustomer = this.manager.create(Customer, request.body)
+
+    return this.customerRepository.save(newCustomer)
   }
 
   async update(req: Request, res: Response, next: NextFunction) {

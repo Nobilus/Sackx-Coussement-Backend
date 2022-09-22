@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm'
 import { Contactperson } from './Contactperson'
 import { Order } from './Order'
 
@@ -33,6 +27,7 @@ export class Customer {
   @OneToMany(() => Contactperson, cp => cp.customer, {
     nullable: true,
     eager: true,
+    cascade: ['insert', 'update'],
   })
   contactpersons: Contactperson[]
 }
