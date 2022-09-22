@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm'
 import { Contactperson } from './Contactperson'
 import { Order } from './Order'
+import { IsPostalCode } from 'class-validator'
 
 @Entity()
 export class Customer {
@@ -11,6 +12,7 @@ export class Customer {
   @Column({ default: null })
   street: string
   @Column({ default: null })
+  @IsPostalCode('BE')
   postal: string
   @Column({ default: null })
   city: string
