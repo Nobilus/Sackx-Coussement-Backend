@@ -28,6 +28,9 @@ export class OrderProduct {
   @Column('double', { default: 0 })
   price: number
 
+  @Column({ default: undefined })
+  remark: string
+
   @ManyToOne(() => Product, product => product.productOrders, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',

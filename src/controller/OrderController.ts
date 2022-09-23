@@ -57,18 +57,17 @@ export class OrderController {
 
     const newOrder = new Order()
 
-    newOrder.customer = request.body.customerId
+    newOrder.customer = request.body.customer
     newOrder.orderType = request.body.orderType
-    newOrder.remark = request.body.remark
     newOrder.productOrders = []
 
     const savedOrder = await this.orderRepository.save(newOrder)
 
-    request.body.products.forEach(item => {
+    request.body.productOrders.forEach(item => {
       savedOrder.productOrders.push({
         ...item,
         orderId: savedOrder.id,
-        customerId: request.body.customerId,
+        customerId: request.body.customer,
       })
     })
 

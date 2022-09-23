@@ -20,9 +20,6 @@ export class Order {
   @Column()
   orderType: string
 
-  @Column({ default: null })
-  remark: string
-
   @ManyToOne(() => Customer, customer => customer.orders, {
     cascade: true,
   })

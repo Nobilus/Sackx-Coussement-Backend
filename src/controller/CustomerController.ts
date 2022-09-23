@@ -57,7 +57,6 @@ export class CustomerController {
     })
 
     if (customerExists) {
-      console.log('the customer exists: ', customerExists)
       return customerExists
     }
 
