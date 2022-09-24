@@ -66,7 +66,8 @@ export class CustomerController {
   }
 
   async update(req: Request, res: Response, next: NextFunction) {
-    await this.customerRepository.update(req.body.id, req.body)
+    const customer = await this.customerRepository.preload(req.body)
+    await this.customerRepository.save(customer)
     return this.customerRepository.findOneBy({ id: req.body.id })
   }
 

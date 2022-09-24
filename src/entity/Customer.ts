@@ -29,7 +29,7 @@ export class Customer {
   @OneToMany(() => Contactperson, cp => cp.customer, {
     nullable: true,
     eager: true,
-    cascade: ['insert', 'update'],
+    cascade: true,
   })
   contactpersons: Contactperson[]
 }

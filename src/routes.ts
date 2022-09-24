@@ -67,6 +67,12 @@ const productRoutes = [
     controller: ProductController,
     action: 'remove',
   },
+  {
+    method: 'patch',
+    route: '/api/product',
+    controller: ProductController,
+    action: 'update',
+  },
 ]
 
 const orderRoutes = [

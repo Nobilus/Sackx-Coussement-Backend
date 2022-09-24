@@ -34,6 +34,11 @@ export class ProductController {
     return this.productRepository.save(request.body)
   }
 
+  async update(request: Request, response: Response, next: NextFunction) {
+    await this.productRepository.update(request.body.id, request.body)
+    return this.productRepository.findOneBy({ id: request.body.id })
+  }
+
   async remove(
     request: Request,
     response: Response,
