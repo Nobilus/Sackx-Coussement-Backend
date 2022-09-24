@@ -32,7 +32,7 @@ export class Product {
   @Column('double', { default: 1 })
   width: number
 
-  @ManyToOne(() => Unit, unit => unit.products, {eager:true})
+  @ManyToOne(() => Unit, unit => unit.products, { eager: true })
   unit: Unit
 
   @OneToMany(() => OrderProduct, orderProduct => orderProduct.product)

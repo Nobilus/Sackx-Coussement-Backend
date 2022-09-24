@@ -100,6 +100,12 @@ const orderRoutes = [
     controller: OrderController,
     action: 'remove',
   },
+  {
+    method: 'patch',
+    route: '/api/order',
+    controller: OrderController,
+    action: 'update',
+  },
 ]
 
 const unitRoutes = [

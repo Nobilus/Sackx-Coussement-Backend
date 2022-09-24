@@ -1,10 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 import { AppDataSource } from '../data-source'
 import { Order } from '../entity/Order'
+import { OrderProduct } from '../entity/OrderProduct'
 
 export class OrderController {
+  private orderProductRepository = AppDataSource.getRepository(OrderProduct)
   private orderRepository = AppDataSource.getRepository(Order)
-
+  private orderManager = AppDataSource.manager
   async all(request: Request, response: Response, next: NextFunction) {
     const query = request.query.type
 
@@ -72,6 +74,12 @@ export class OrderController {
     })
 
     return this.orderRepository.save(savedOrder)
+  }
+
+  async update(request: Request) {
+    const order = await this.orderRepository.preload(request.body)
+    await this.orderRepository.save(order)
+    return this.orderRepository.findOneBy({ id: request.body.id })
   }
 
   async remove(request: Request): Promise<Order> {
