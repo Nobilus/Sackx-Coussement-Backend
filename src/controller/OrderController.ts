@@ -74,11 +74,7 @@ export class OrderController {
     return this.orderRepository.save(savedOrder)
   }
 
-  async remove(
-    request: Request,
-    response: Response,
-    next: NextFunction,
-  ): Promise<Order> {
+  async remove(request: Request): Promise<Order> {
     let orderToRemove = await this.orderRepository.findOneBy({
       id: parseInt(request.params.id, 10),
     })

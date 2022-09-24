@@ -39,14 +39,10 @@ export class ProductController {
     return this.productRepository.findOneBy({ id: request.body.id })
   }
 
-  async remove(
-    request: Request,
-    response: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    let userToRemove = await this.productRepository.findOneBy({
+  async remove(request: Request): Promise<Product> {
+    let productToRemove = await this.productRepository.findOneBy({
       id: parseInt(request.params.id, 10),
     })
-    await this.productRepository.remove(userToRemove)
+    return await this.productRepository.remove(productToRemove)
   }
 }
