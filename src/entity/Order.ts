@@ -22,13 +22,11 @@ export class Order {
 
   @ManyToOne(() => Customer, customer => customer.orders, {
     cascade: true,
-    eager: true,
   })
   customer: Customer
 
-  @OneToMany(() => OrderProduct, orderProduct => orderProduct.product, {
+  @OneToMany(() => OrderProduct, orderProduct => orderProduct.order, {
     cascade: true,
-    eager: true,
   })
   productOrders: OrderProduct[]
 }
