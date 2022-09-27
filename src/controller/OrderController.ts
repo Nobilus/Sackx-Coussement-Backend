@@ -56,8 +56,6 @@ export class OrderController {
   }
 
   async save(request: Request, response: Response, next: NextFunction) {
-    console.log(request.body)
-
     const tempOrder = {
       ...request.body,
       productOrders: [],
@@ -68,17 +66,7 @@ export class OrderController {
     )
 
     for (const item of request.body.productOrders) {
-      // const product = await this.manager.findOneBy(Product, {
-      //   id: productId,
-      // })
-      // order.productOrders.push({
-      //   ...item,
-      //   orderId: order.id,
-      //   customerId: request.body.customer,
-      // })
-
       const newPO = new OrderProduct()
-
       newPO.orderId = order.id
       newPO.productId = item.productId
       newPO.amount = item.amount
@@ -87,27 +75,21 @@ export class OrderController {
       newPO.remark = item.remark
       newPO.thickness = item.thickness
       newPO.width = item.width
-
-      // const test = {
-      //   customerId: order.customer,
-      //   orderId: order.id,
-      //   productId: item.productId,
-      //   ...item,
-      // }
-
-      // console.log('test: ', test)
-
       const po: OrderProduct = this.manager.create(OrderProduct, newPO)
-      // const po = await this.manager.save(newPO)
-
-      console.log(po)
-
       order.productOrders.push(po)
     }
 
     console.log('the full saved ', order)
 
     return this.orderRepository.save(order)
+  }
+
+  async update(request: Request) {
+    const order = await this.orderRepository.preload(request.body)
+    console.log(order.productOrders)
+
+    await this.orderRepository.save(order)
+    return this.orderRepository.findOneBy({ id: request.body.id })
   }
 
   async remove(request: Request): Promise<Order> {

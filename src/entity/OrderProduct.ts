@@ -37,9 +37,13 @@ export class OrderProduct {
   @Column({ default: undefined })
   remark: string
 
-  @ManyToOne(() => Product, product => product.productOrders, {})
+  @ManyToOne(() => Product, product => product.productOrders, {
+    onUpdate: 'CASCADE',
+  })
   product!: Product
 
-  @ManyToOne(() => Order, order => order.productOrders, {})
+  @ManyToOne(() => Order, order => order.productOrders, {
+    onUpdate: 'CASCADE',
+  })
   order!: Order
 }
