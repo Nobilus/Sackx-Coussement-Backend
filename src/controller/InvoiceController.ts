@@ -12,7 +12,13 @@ export class InvoiceController {
 
   async all(request: Request, response: Response, next: NextFunction) {
     try {
-      return this.invoiceRepository.find()
+      return this.invoiceRepository.find({
+        relations: [
+          'customer',
+          'orders.productOrders.product',
+          'orders.productOrders.product.unit',
+        ],
+      })
     } catch (error) {
       console.error(error)
       response.statusCode = 500

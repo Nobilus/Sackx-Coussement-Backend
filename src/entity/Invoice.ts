@@ -19,6 +19,7 @@ export class Invoice {
 
   @ManyToOne(() => Customer, customer => customer.orders, {
     cascade: true,
+    eager: true,
   })
   customer: Customer
 
