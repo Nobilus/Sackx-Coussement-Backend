@@ -6,17 +6,41 @@ export class UnitController {
   private unitRepository = AppDataSource.getRepository(Unit)
 
   async all(request: Request, response: Response, next: NextFunction) {
-    return this.unitRepository.find()
+    try {
+      return this.unitRepository.find()
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
+    }
   }
 
   async one(request: Request, response: Response, next: NextFunction) {
-    return this.unitRepository.findOne({
-      where: { id: parseInt(request.params.id, 10) },
-    })
+    try {
+      const unit = await this.unitRepository.findOne({
+        where: { id: parseInt(request.params.id, 10) },
+      })
+      if (unit) {
+        return unit
+      }
+      response.statusCode = 404
+      response.statusMessage = 'Not found'
+      response.send()
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send
+    }
   }
 
   async save(request: Request, response: Response, next: NextFunction) {
-    return this.unitRepository.save(request.body)
+    try {
+      return this.unitRepository.save(request.body)
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
+    }
   }
 
   async remove(
@@ -24,9 +48,15 @@ export class UnitController {
     response: Response,
     next: NextFunction,
   ): Promise<void> {
-    let userToRemove = await this.unitRepository.findOneBy({
-      id: parseInt(request.params.id, 10),
-    })
-    await this.unitRepository.remove(userToRemove)
+    try {
+      let userToRemove = await this.unitRepository.findOneBy({
+        id: parseInt(request.params.id, 10),
+      })
+      await this.unitRepository.remove(userToRemove)
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
+    }
   }
 }

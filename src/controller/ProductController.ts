@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Request, response, Response } from 'express'
 import { Like } from 'typeorm'
 import { AppDataSource } from '../data-source'
 import { Product } from '../entity/Product'
@@ -7,42 +7,79 @@ export class ProductController {
   private productRepository = AppDataSource.getRepository(Product)
 
   async all(request: Request, response: Response, next: NextFunction) {
-    const query = request.query.q
+    try {
+      const query = request.query.q
 
-    if (query) {
-      return await this.productRepository.find({
-        where: { name: Like(`%${query}%`) },
-      })
+      if (query) {
+        return await this.productRepository.find({
+          where: { name: Like(`%${query}%`) },
+        })
+      }
+
+      return (
+        await this.productRepository.find({
+          relations: {
+            unit: true,
+          },
+        })
+      ).sort((a, b) => a.name.localeCompare(b.name))
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
     }
-
-    return (
-      await this.productRepository.find({
-        relations: {
-          unit: true,
-        },
-      })
-    ).sort((a, b) => a.name.localeCompare(b.name))
   }
 
   async one(request: Request, response: Response, next: NextFunction) {
-    return this.productRepository.findOne({
-      where: { id: parseInt(request.params.id, 10) },
-    })
+    try {
+      const product = await this.productRepository.findOne({
+        where: { id: parseInt(request.params.id, 10) },
+      })
+
+      if (product) {
+        return product
+      }
+      response.statusCode = 404
+      response.statusMessage = 'Not found'
+      response.send()
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
+    }
   }
 
   async save(request: Request, response: Response, next: NextFunction) {
-    return this.productRepository.save(request.body)
+    try {
+      return this.productRepository.save(request.body)
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
+    }
   }
 
   async update(request: Request, response: Response, next: NextFunction) {
-    await this.productRepository.update(request.body.id, request.body)
-    return this.productRepository.findOneBy({ id: request.body.id })
+    try {
+      await this.productRepository.update(request.body.id, request.body)
+      return this.productRepository.findOneBy({ id: request.body.id })
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
+    }
   }
 
   async remove(request: Request): Promise<Product> {
-    let productToRemove = await this.productRepository.findOneBy({
-      id: parseInt(request.params.id, 10),
-    })
-    return await this.productRepository.remove(productToRemove)
+    try {
+      let productToRemove = await this.productRepository.findOneBy({
+        id: parseInt(request.params.id, 10),
+      })
+      return await this.productRepository.remove(productToRemove)
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
+    }
   }
 }

@@ -31,54 +31,86 @@ export class CustomerController {
   }
 
   async all(request: Request, response: Response, next: NextFunction) {
-    const query = request.query.q
+    try {
+      const query = request.query.q
 
-    if (query) {
-      return (
-        await this.customerRepository.find({
-          where: { name: Like(`%${query}%`) },
-        })
-      ).sort((a, b) => a.name.localeCompare(b.name))
+      if (query) {
+        return (
+          await this.customerRepository.find({
+            where: { name: Like(`%${query}%`) },
+          })
+        ).sort((a, b) => a.name.localeCompare(b.name))
+      }
+      return (await this.customerRepository.find()).sort((a, b) =>
+        a.name.localeCompare(b.name),
+      )
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
     }
-    return (await this.customerRepository.find()).sort((a, b) =>
-      a.name.localeCompare(b.name),
-    )
   }
 
   async one(request: Request, response: Response, next: NextFunction) {
-    return this.customerRepository.findOne({
-      where: { id: parseInt(request.params.id, 10) },
-    })
+    try {
+      const customer = this.customerRepository.findOne({
+        where: { id: parseInt(request.params.id, 10) },
+      })
+      if (customer) {
+        return customer
+      }
+      response.statusCode = 400
+      response.statusMessage = 'Not found'
+      response.send()
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
+    }
   }
 
   async save(request: Request, response: Response, next: NextFunction) {
-    const customerExists = await this.customerRepository.findOneBy({
-      name: request.body.name,
-    })
+    try {
+      const customerExists = await this.customerRepository.findOneBy({
+        name: request.body.name,
+      })
 
-    if (customerExists) {
-      return customerExists
+      if (customerExists) {
+        return customerExists
+      }
+
+      const newCustomer = this.manager.create(Customer, request.body)
+
+      return this.customerRepository.save(newCustomer)
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
     }
-
-    const newCustomer = this.manager.create(Customer, request.body)
-
-    return this.customerRepository.save(newCustomer)
   }
 
   async update(req: Request, res: Response, next: NextFunction) {
-    const customer = await this.customerRepository.preload(req.body)
-    await this.customerRepository.save(customer)
-    return this.customerRepository.findOneBy({ id: req.body.id })
+    try {
+      const customer = await this.customerRepository.preload(req.body)
+      await this.customerRepository.save(customer)
+      return this.customerRepository.findOneBy({ id: req.body.id })
+    } catch (error) {
+      console.error(error)
+      res.statusCode = 500
+      res.send()
+    }
   }
 
-  async remove(
-    request: Request,
-    response: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    let userToRemove = await this.customerRepository.findOneBy({
-      id: parseInt(request.params.id, 10),
-    })
-    await this.customerRepository.remove(userToRemove)
+  async remove(request: Request, response: Response, next: NextFunction) {
+    try {
+      let userToRemove = await this.customerRepository.findOneBy({
+        id: parseInt(request.params.id, 10),
+      })
+      await this.customerRepository.remove(userToRemove)
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
+    }
   }
 }

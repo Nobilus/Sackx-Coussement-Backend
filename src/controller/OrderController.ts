@@ -9,11 +9,32 @@ export class OrderController {
   private manager = AppDataSource.manager
 
   async all(request: Request, response: Response, next: NextFunction) {
-    const query = request.query.type
+    try {
+      const query = request.query.type
 
-    if (query && query === 'bestelbon') {
+      if (query && query === 'bestelbon') {
+        return this.orderRepository.find({
+          where: { orderType: 'bestelbon' },
+          relations: {
+            customer: true,
+            productOrders: {
+              product: true,
+            },
+          },
+        })
+      } else if (query && query === 'offerte') {
+        return this.orderRepository.find({
+          where: { orderType: 'offerte' },
+          relations: {
+            customer: true,
+            productOrders: {
+              product: true,
+            },
+          },
+        })
+      }
+
       return this.orderRepository.find({
-        where: { orderType: 'bestelbon' },
         relations: {
           customer: true,
           productOrders: {
@@ -21,81 +42,94 @@ export class OrderController {
           },
         },
       })
-    } else if (query && query === 'offerte') {
-      return this.orderRepository.find({
-        where: { orderType: 'offerte' },
-        relations: {
-          customer: true,
-          productOrders: {
-            product: true,
-          },
-        },
-      })
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
     }
-
-    return this.orderRepository.find({
-      relations: {
-        customer: true,
-        productOrders: {
-          product: true,
-        },
-      },
-    })
   }
 
   async one(request: Request, response: Response, next: NextFunction) {
-    return this.orderRepository.findOne({
-      where: { id: parseInt(request.params.id, 10) },
-      relations: {
-        customer: true,
-        productOrders: {
-          product: true,
+    try {
+      const order = await this.orderRepository.findOne({
+        where: { id: parseInt(request.params.id, 10) },
+        relations: {
+          customer: true,
+          productOrders: {
+            product: true,
+          },
         },
-      },
-    })
+      })
+
+      if (order) {
+        return order
+      }
+      response.statusCode = 404
+      response.statusMessage = 'Not found'
+      response.send()
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
+    }
   }
 
   async save(request: Request, response: Response, next: NextFunction) {
-    const tempOrder = {
-      ...request.body,
-      productOrders: [],
+    try {
+      const tempOrder = {
+        ...request.body,
+        productOrders: [],
+      }
+
+      const order: Order = await this.orderRepository.save(
+        this.manager.create(Order, tempOrder),
+      )
+
+      for (const item of request.body.productOrders) {
+        const newPO = new OrderProduct()
+        newPO.orderId = order.id
+        newPO.productId = item.productId
+        newPO.amount = item.amount
+        newPO.length = item.length
+        newPO.price = item.price
+        newPO.remark = item.remark
+        newPO.thickness = item.thickness
+        newPO.width = item.width
+        const po: OrderProduct = this.manager.create(OrderProduct, newPO)
+        order.productOrders.push(po)
+      }
+      return this.orderRepository.save(order)
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
     }
-
-    const order: Order = await this.orderRepository.save(
-      this.manager.create(Order, tempOrder),
-    )
-
-    for (const item of request.body.productOrders) {
-      const newPO = new OrderProduct()
-      newPO.orderId = order.id
-      newPO.productId = item.productId
-      newPO.amount = item.amount
-      newPO.length = item.length
-      newPO.price = item.price
-      newPO.remark = item.remark
-      newPO.thickness = item.thickness
-      newPO.width = item.width
-      const po: OrderProduct = this.manager.create(OrderProduct, newPO)
-      order.productOrders.push(po)
-    }
-
-    console.log('the full saved ', order)
-
-    return this.orderRepository.save(order)
   }
 
-  async update(request: Request) {
-    const order = await this.orderRepository.preload(request.body)
-    console.log(order.productOrders)
+  async update(request: Request, response: Response) {
+    try {
+      const order = await this.orderRepository.preload(request.body)
+      console.log(order.productOrders)
 
-    await this.orderRepository.save(order)
-    return this.orderRepository.findOneBy({ id: request.body.id })
+      await this.orderRepository.save(order)
+      return this.orderRepository.findOneBy({ id: request.body.id })
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
+    }
   }
 
-  async remove(request: Request): Promise<Order> {
-    let orderToRemove = await this.orderRepository.findOneBy({
-      id: parseInt(request.params.id, 10),
-    })
-    return await this.orderRepository.remove(orderToRemove)
+  async remove(request: Request, response: Response) {
+    try {
+      let orderToRemove = await this.orderRepository.findOneBy({
+        id: parseInt(request.params.id, 10),
+      })
+      return await this.orderRepository.remove(orderToRemove)
+    } catch (error) {
+      console.error(error)
+      response.statusCode = 500
+      response.send()
+    }
   }
 }
