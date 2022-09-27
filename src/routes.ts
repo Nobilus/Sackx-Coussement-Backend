@@ -1,4 +1,5 @@
 import { CustomerController } from './controller/CustomerController'
+import { InvoiceController } from './controller/InvoiceController'
 import { OrderController } from './controller/OrderController'
 import { ProductController } from './controller/ProductController'
 import { UnitController } from './controller/UnitController'
@@ -107,6 +108,38 @@ const orderRoutes = [
     action: 'update',
   },
 ]
+const invoiceRoutes = [
+  {
+    method: 'get',
+    route: '/api/invoices',
+    controller: InvoiceController,
+    action: 'all',
+  },
+  {
+    method: 'get',
+    route: '/api/invoice/:id',
+    controller: InvoiceController,
+    action: 'one',
+  },
+  {
+    method: 'post',
+    route: '/api/invoice',
+    controller: InvoiceController,
+    action: 'save',
+  },
+  {
+    method: 'delete',
+    route: '/api/invoice/:id',
+    controller: InvoiceController,
+    action: 'remove',
+  },
+  {
+    method: 'patch',
+    route: '/api/invoice',
+    controller: InvoiceController,
+    action: 'update',
+  },
+]
 
 const unitRoutes = [
   {
@@ -134,4 +167,5 @@ export const Routes = [
   ...productRoutes,
   ...orderRoutes,
   ...unitRoutes,
+  ...invoiceRoutes,
 ]

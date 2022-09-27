@@ -8,6 +8,7 @@ import { Unit } from './entity/Unit'
 import { Config } from './entity/Config'
 import { OrderProduct } from './entity/OrderProduct'
 import { Contactperson } from './entity/Contactperson'
+import { Invoice } from './entity/Invoice'
 dotenv.config()
 
 export const AppDataSource = new DataSource({
@@ -28,6 +29,7 @@ export const AppDataSource = new DataSource({
     Config,
     OrderProduct,
     Contactperson,
+    Invoice,
   ],
   migrations: [],
   subscribers: [],
