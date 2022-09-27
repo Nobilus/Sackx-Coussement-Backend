@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import { In } from 'typeorm'
 import { AppDataSource } from '../data-source'
 import { Order } from '../entity/Order'
 import { OrderProduct } from '../entity/OrderProduct'
@@ -6,6 +7,7 @@ import { Product } from '../entity/Product'
 
 export class OrderController {
   private orderRepository = AppDataSource.getRepository(Order)
+  private orderProductRepository = AppDataSource.getRepository(OrderProduct)
   private manager = AppDataSource.manager
 
   async all(request: Request, response: Response, next: NextFunction) {
@@ -108,8 +110,23 @@ export class OrderController {
 
   async update(request: Request, response: Response) {
     try {
+      const oldOrder = await this.orderRepository.findOneBy({
+        id: request.body.id,
+      })
       const order = await this.orderRepository.preload(request.body)
-      console.log(order.productOrders)
+
+      if (oldOrder.productOrders.length > order.productOrders.length) {
+        const oldPOs = oldOrder.productOrders.map(po => po.id)
+        const newPOs = order.productOrders.map(po => po.id)
+
+        const removedPOs = oldPOs.filter(x => !newPOs.includes(x))
+
+        const pos = await this.orderProductRepository.findBy({
+          id: In(removedPOs),
+        })
+
+        await this.orderProductRepository.remove(pos)
+      }
 
       await this.orderRepository.save(order)
       return this.orderRepository.findOneBy({ id: request.body.id })
