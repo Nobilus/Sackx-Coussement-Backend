@@ -39,11 +39,13 @@ export class OrderProduct {
 
   @ManyToOne(() => Product, product => product.productOrders, {
     onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
   })
   product!: Product
 
   @ManyToOne(() => Order, order => order.productOrders, {
     onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
   })
   order!: Order
 }
