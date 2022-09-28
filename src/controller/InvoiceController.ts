@@ -12,13 +12,15 @@ export class InvoiceController {
 
   async all(request: Request, response: Response, next: NextFunction) {
     try {
-      return this.invoiceRepository.find({
-        relations: [
-          'customer',
-          'orders.productOrders.product',
-          'orders.productOrders.product.unit',
-        ],
-      })
+      return (
+        await this.invoiceRepository.find({
+          relations: [
+            'customer',
+            'orders.productOrders.product',
+            'orders.productOrders.product.unit',
+          ],
+        })
+      ).sort((a, b) => b.id - a.id)
     } catch (error) {
       console.error(error)
       response.statusCode = 500
@@ -30,6 +32,12 @@ export class InvoiceController {
     try {
       const invoice = await this.invoiceRepository.findOne({
         where: { id: parseInt(request.params.id, 10) },
+
+        relations: [
+          'customer',
+          'orders.productOrders.product',
+          'orders.productOrders.product.unit',
+        ],
       })
 
       if (invoice) {
