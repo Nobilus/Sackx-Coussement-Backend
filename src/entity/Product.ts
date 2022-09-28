@@ -33,7 +33,7 @@ export class Product {
   width: number
 
   @ManyToOne(() => Unit, unit => unit.products, { eager: true })
-  unit: Unit
+  unit!: Unit
 
   @OneToMany(() => OrderProduct, orderProduct => orderProduct.product, {
     cascade: true,

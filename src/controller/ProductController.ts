@@ -2,9 +2,11 @@ import { NextFunction, Request, response, Response } from 'express'
 import { Like } from 'typeorm'
 import { AppDataSource } from '../data-source'
 import { Product } from '../entity/Product'
+import { Unit } from '../entity/Unit'
 
 export class ProductController {
   private productRepository = AppDataSource.getRepository(Product)
+  private manager = AppDataSource.manager
 
   async all(request: Request, response: Response, next: NextFunction) {
     try {
@@ -51,7 +53,15 @@ export class ProductController {
 
   async save(request: Request, response: Response, next: NextFunction) {
     try {
-      return this.productRepository.save(request.body)
+      const unit = await this.manager.findOneBy(Unit, { id: 1 })
+
+      const product: Product = this.manager.create(Product, request.body)
+
+      if (!product.unit) {
+        product.unit = unit
+      }
+
+      return this.productRepository.save(product)
     } catch (error) {
       console.error(error)
       response.statusCode = 500

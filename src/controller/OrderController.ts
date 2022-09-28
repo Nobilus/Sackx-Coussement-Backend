@@ -87,16 +87,27 @@ export class OrderController {
         this.manager.create(Order, tempOrder),
       )
 
-      for (const item of request.body.productOrders) {
+      for (const {
+        productId,
+        id,
+        amount,
+        length,
+        price,
+        remark,
+        thickness,
+        width,
+        name,
+      } of request.body.productOrders) {
         const newPO = new OrderProduct()
+
         newPO.orderId = order.id
-        newPO.productId = item.productId
-        newPO.amount = item.amount
-        newPO.length = item.length
-        newPO.price = item.price
-        newPO.remark = item.remark
-        newPO.thickness = item.thickness
-        newPO.width = item.width
+        newPO.productId = productId
+        newPO.amount = amount
+        newPO.length = length
+        newPO.price = price
+        newPO.remark = remark
+        newPO.thickness = thickness
+        newPO.width = width
         const po: OrderProduct = this.manager.create(OrderProduct, newPO)
         order.productOrders.push(po)
       }
